@@ -1,0 +1,27 @@
+name: Network Isolation Test Rule
+id: 172902be-76e9-4ee7-a48a-6275fa571cf4 
+version: 1.4.0
+description: |
+  Test rule for network isolation functionality that triggers on a simple, 
+  predictable condition to verify isolation works correctly.
+enabled: true
+
+condition: >
+  query_dns
+    and dns.name in 'pastebin.com'
+
+action:
+  - name: isolate
+    whitelist_domains:
+      - "localhost"
+      - "127.0.0.1"
+    isolation_name: "test-isolation"
+
+output: |
+  **Network Isolation Test Rule**
+  - Queried Domain: %dns.name
+  - Process: %ps.name (PID: %ps.pid)
+  - Parent Process: %ps.parent.name (PPID: %ps.ppid)
+  - **Check Windows Firewall Rules**
+
+min-engine-version: 2.0.0
